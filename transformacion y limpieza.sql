@@ -37,24 +37,66 @@ FROM information_schema.columns
 WHERE table_name = 'registro_aeropuerto';
 
 -- Observamos que algunas columnas que deberían ser de tipo numérico están como texto, por lo que vamos a convertirlas
--- Pero antes, verificamos si hay valores no numéricos en esas columnas (edad_anios, estatura_cm, cantidad_de_personas)
+-- Pero antes, verificamos si hay valores no numéricos en esas columnas (edad_anios, estatura_cm, cantidad_de_personas) y al final las convertimos a tipo numérico.
 
--- Verificamos los valores únicos en la columna edad_anios
-SELECT edad_anios AS ea
+-- 1.1 Verificar valores únicos de edad
+SELECT edad_anios
 FROM registro_aeropuerto
 GROUP BY edad_anios
-ORDER BY edad_anios ASC
+ORDER BY edad_anios ASC;
 
--- Observamos que hay valores incoherentes como '-1' y años mayores a 100, por lo que vamos a ver en que grupo de edad se encuentran esos registros
+-- 1.2 Revisar cómo se distribuyen los valores por grupo de edad
 SELECT grupo_edad, edad_anios
 FROM registro_aeropuerto
 GROUP BY grupo_edad, edad_anios
 ORDER BY grupo_edad, edad_anios ASC;
 
--- Al ver como se distribuyen los grupos de edad, podemos identificar que el valor '-1' corresponde al grupo 'DESCONOCIDO' y los valores mayores a 100 corresponden al grupo 'ADULTO MAYOR'
--- Por lo tanto, vamos a eliminar esos registros antes de convertir la columna edad_anios a tipo numérico
-DELETE FROM registro_aeropuerto
-WHERE edad_anios = '-1' OR CAST(edad_anios AS INTEGER) > 100;
+-- 1.3 Identificación:
+-- '-1'  → grupo 'DESCONOCIDO'
+-- '>= 100' → valores improbables para viajeros (error de registro)
+
+-- 1.4 Verificar cuántos registros se verán afectados
+SELECT COUNT(*)
+FROM registro_aeropuerto
+WHERE TRIM(edad_anios) = '-1'
+   OR CAST(TRIM(edad_anios) AS INTEGER) >= 100;
+
+-- 1.5 Limpieza: reemplazar datos inválidos con NULL, no se eliminarán registros para aprovechar toda la información posible
+UPDATE registro_aeropuerto
+SET edad_anios = NULL
+WHERE TRIM(edad_anios) = '-1'
+   OR CAST(TRIM(edad_anios) AS INTEGER) >= 100;
+
+-- 1.6 Volver a verificar valores únicos
+SELECT edad_anios
+FROM registro_aeropuerto
+GROUP BY edad_anios
+ORDER BY edad_anios ASC;
+
+SELECT *
+FROM registro_aeropuerto
+WHERE CAST(edad_anios AS INTEGER) = 0
+  AND nivel_academico IS NOT NULL;
+
+
+-- 2.1 Verificar valores únicos de estatura_cm
+SELECT estatura_cm AS ec
+FROM registro_aeropuerto
+GROUP BY ec
+ORDER BY ec ASC;
+
+-- 2.2 Identificación de valores no numéricos o improbables:
+-- valores menores a 50 cm, '-1' y '17070' → errores de registro
+-- 2.3 Verificar cuántos registros se verán afectados
+SELECT COUNT(*)
+FROM registro_aeropuerto
+WHERE CAST(REGEXP_REPLACE(TRIM(estatura_cm), '[^0-9\-]') AS INTEGER) <= 50
+ORDER BY estatura_cm ASC;
+
+-- 7.1 Conversión final del tipo de dato
+ALTER TABLE registro_aeropuerto
+ALTER COLUMN edad_anios TYPE INTEGER
+USING CAST(TRIM(edad_anios) AS INTEGER);
 
 -- Finalmente, vamos a revisar si hay valores nulos en las columnas del dataset
 SELECT COUNT(*)
