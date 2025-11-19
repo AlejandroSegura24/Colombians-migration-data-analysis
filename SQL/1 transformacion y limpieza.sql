@@ -1,15 +1,31 @@
 -- Verificamos si la tabla se cargó correctamente
-SELECT * FROM registro_aeropuerto
-LIMIT 5;
+SELECT * FROM registro_aeropuerto LIMIT 5;
 
 -- Contamos el número total de registros cargados
 SELECT COUNT(*) AS total_registros
 FROM registro_aeropuerto;
 
 -- Como primer paso, vamos a revisar si hay valores nulos en las columnas del dataset
-SELECT COUNT(*)
-FROM registro_aeropuerto
-WHERE NOT (registro_aeropuerto IS NOT NULL);
+-- Contamos cuántos valores NULL hay por columna
+SELECT 
+    SUM(CASE WHEN pa_s IS NULL THEN 1 ELSE 0 END) AS null_pais,
+    SUM(CASE WHEN c_digo_iso_pa_s IS NULL THEN 1 ELSE 0 END) AS null_codigo_iso_pais,
+    SUM(CASE WHEN ciudad_de_residencia IS NULL THEN 1 ELSE 0 END) AS null_ciudad_de_residencia,
+    SUM(CASE WHEN oficina_de_registro IS NULL THEN 1 ELSE 0 END) AS null_oficina_de_registro,
+    SUM(CASE WHEN grupo_edad IS NULL THEN 1 ELSE 0 END) AS null_grupo_edad,
+    SUM(CASE WHEN edad_a_os IS NULL THEN 1 ELSE 0 END) AS null_edad_anios,
+    SUM(CASE WHEN rea_conocimiento IS NULL THEN 1 ELSE 0 END) AS null_area_conocimiento,
+    SUM(CASE WHEN sub_area_conocimiento IS NULL THEN 1 ELSE 0 END) AS null_sub_area_conocimiento,
+    SUM(CASE WHEN nivel_acad_mico IS NULL THEN 1 ELSE 0 END) AS null_nivel_academico,
+    SUM(CASE WHEN estado_civil IS NULL THEN 1 ELSE 0 END) AS null_estado_civil,
+    SUM(CASE WHEN g_nero IS NULL THEN 1 ELSE 0 END) AS null_genero,
+    SUM(CASE WHEN etnia_de_la_persona IS NULL THEN 1 ELSE 0 END) AS null_etnia_de_la_persona,
+    SUM(CASE WHEN estatura_cm IS NULL THEN 1 ELSE 0 END) AS null_estatura_cm,
+    SUM(CASE WHEN ciudad_de_nacimiento IS NULL THEN 1 ELSE 0 END) AS null_ciudad_de_nacimiento,
+    SUM(CASE WHEN localizaci_n IS NULL THEN 1 ELSE 0 END) AS null_localizacion,
+    SUM(CASE WHEN fecha_de_registro IS NULL THEN 1 ELSE 0 END) AS null_fecha_de_registro,
+    SUM(CASE WHEN cantidad_de_personas IS NULL THEN 1 ELSE 0 END) AS null_cantidad_de_personas
+FROM registro_aeropuerto;
 -- Observamos que ninguna columna tiene valores nulos, por lo que no es necesario realizar limpieza de datos en ese aspecto.
 
 -- Ahora, verificamos la codificación de caracteres utilizada en la base de datos
@@ -246,7 +262,33 @@ SELECT column_name, data_type
 FROM information_schema.columns
 WHERE table_name = 'registro_aeropuerto';
 
--- Finalmente, Verificamos nuevamente el dataset para asegurarnos de que todo esté en orden
+-- Verificamos nuevamente el dataset para asegurarnos de que todo esté en orden
 SELECT * FROM registro_aeropuerto LIMIT 5;
+
+-- En la columna 'pais', verificamos si hay valores inconsistentes o erróneos
+SELECT pais
+FROM registro_aeropuerto
+GROUP BY pais
+ORDER BY pais ASC;
+
+SELECT oficina_de_registro
+FROM registro_aeropuerto
+GROUP BY oficina_de_registro
+ORDER BY oficina_de_registro ASC;
+
+
+-- Los nombres de ESPAÑA y CURAZAO tienen inconcistencias con su escritura, asi que los corregimos
+UPDATE registro_aeropuerto
+    SET pais = 'ESPANA'
+    WHERE pais LIKE 'ESPA�A';
+UPDATE registro_aeropuerto
+    SET pais = 'CURACAO'
+    WHERE pais LIKE 'CURA�AO';
+
+-- Verificamos nuevamente los valores únicos en la columna 'pais' después de las correcciones
+SELECT pais
+FROM registro_aeropuerto
+GROUP BY pais
+ORDER BY pais ASC;
 
 -- Ahora el dataset está limpio y transformado correctamente, listo para su análisis posterior en el siguiente documento SQL.
