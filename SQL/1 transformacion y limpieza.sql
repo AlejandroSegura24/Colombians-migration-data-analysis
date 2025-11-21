@@ -82,6 +82,7 @@ ORDER BY grupo_edad, edad_anios ASC;
 -- 1.3 Identificación:
 -- '-1'  → grupo 'DESCONOCIDO'
 -- '>= 100' → valores improbables para viajeros (error de registro)
+-- Valores inconsistentes en el grupo 'PRIMERA INFANCIA' (0-5 años) con edades mayores a 5 años, se hara el arreglo despues convertir la columna a tipo numérico.
 
 -- 1.4 Verificar cuántos registros se verán afectados
 SELECT COUNT(*)
@@ -213,6 +214,25 @@ ALTER TABLE registro_aeropuerto
 SELECT column_name, data_type
 FROM information_schema.columns
 WHERE table_name = 'registro_aeropuerto';
+
+-- Ahora, haremos el cambio de la columnas 'edad_anios' a 'grupo_edad' basado en los siguientes rangos:
+-- '0-5'   → 'PRIMERA INFANCIA'
+-- '6-11'  → 'INFANCIA'
+-- '12-17' → 'ADOLESCENCIA'
+-- '18-28' → 'ADULTOS JOVENES'
+-- '29-59' → 'ADULTOS'
+-- '60-99' → 'ADULTOS MAYORES'
+UPDATE registro_aeropuerto
+SET grupo_edad = 
+    CASE 
+        WHEN edad_anios BETWEEN 0 AND 5 THEN 'PRIMERA INFANCIA'
+        WHEN edad_anios BETWEEN 6 AND 11 THEN 'INFANCIA'
+        WHEN edad_anios BETWEEN 12 AND 17 THEN 'ADOLESCENCIA'
+        WHEN edad_anios BETWEEN 18 AND 28 THEN 'ADULTOS JOVENES'
+        WHEN edad_anios BETWEEN 29 AND 59 THEN 'ADULTOS'
+        WHEN edad_anios BETWEEN 60 AND 99 THEN 'ADULTOS MAYORES'
+        ELSE 'DESCONOCIDO'
+    END;
 
 -- Ahora, las columnas 'localizacion' y 'fecha_de_registro' deben ser convertidas a tipos adecuados (BOOLEAN y DATE respectivamente)
 -- 1. Ver los datos de la columna 'localizacion' para identificar los valores presentes
