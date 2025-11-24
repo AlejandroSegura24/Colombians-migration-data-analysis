@@ -299,7 +299,7 @@ ORDER BY oficina_de_registro ASC;
 
 -- Los nombres de ESPAÑA y CURAZAO tienen inconcistencias con su escritura, asi que los corregimos
 UPDATE registro_aeropuerto
-    SET pais = 'ESPANA'
+    SET pais = 'ESPAÑA'
     WHERE pais LIKE 'ESPA�A';
 UPDATE registro_aeropuerto
     SET pais = 'CURACAO'

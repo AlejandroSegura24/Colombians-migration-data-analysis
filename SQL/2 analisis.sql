@@ -103,11 +103,19 @@ ORDER BY grupo_edad, total_migrantes DESC;
 -- Tambien se observa que los registros nombrados como 'DESCONOCIDO' tienen educacion de bachillerato o primaria, lo que nos da la pista de que ese grupo se podria clasificar con los adolescentes o los infantes.
 
 -- 3.2 Área de conocimiento más común entre migrantes
+SELECT area_conocimiento,COUNT(*) AS total
+FROM registro_aeropuerto
+GROUP BY area_conocimiento
+ORDER BY total DESC;
+-- La mayoría de los migrantes no tienen un área de conocimiento específica, lo que sigue demostrando que muchas personas migran en busca de mejores oportunidades laborales.
+
+-- 3.3 Subárea de conocimiento más común entre los que no tienen área de conocimiento
 SELECT sub_area_conocimiento,COUNT(*) AS total
 FROM registro_aeropuerto
+WHERE area_conocimiento = 'NINGUNA'
 GROUP BY sub_area_conocimiento
 ORDER BY total DESC;
+-- Vemos que los migrantes sin área de conocimiento específica tampoco tienen una subárea definida.
 
-
-
-SELECT * FROM registro_aeropuerto LIMIT 10;
+-- Despues de realizar el análisis, ahora pasaremos la tabla limpia a jupyter para hacer mas análisis pero ahora con visualizaciones.
+-- Fin del análisis SQL
