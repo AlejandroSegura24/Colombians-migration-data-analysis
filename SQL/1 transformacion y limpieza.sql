@@ -282,6 +282,11 @@ SELECT column_name, data_type
 FROM information_schema.columns
 WHERE table_name = 'registro_aeropuerto';
 
+-- 2.4 Se encontro una inconsistencia en la fecha '1900-01-01', asi que vamos a corregirla por la fecha mas antigua valida en el dataset
+UPDATE registro_aeropuerto
+SET fecha_de_registro = '2013-02-01'
+WHERE fecha_de_registro = '1900-01-01';
+
 -- Verificamos nuevamente el dataset para asegurarnos de que todo esté en orden
 SELECT * FROM registro_aeropuerto LIMIT 5;
 
