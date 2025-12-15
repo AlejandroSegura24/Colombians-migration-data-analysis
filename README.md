@@ -160,11 +160,11 @@ Desde allí podrás:
 
 Los resultados principales se resumen en los siguientes hallazgos:
 
-* **Destinos Principales:** Estados Unidos, España y Venezuela son los países que concentran el mayor flujo de viajeros.
-* **Perfil del Viajero:** El **Adulto en edad productiva** es el grupo que más viaja.
-* **Motivación vs. Formación:** Se identificó una migración dual: existe un flujo importante de adultos con **alta formación** (búsqueda de oportunidades) y un flujo similar de adultos con **baja formación** (falta de oportunidades en el país).
-* **Influencia Étnica:** La pertenencia étnica sí modifica el patrón de destino. El grupo **Afrodescendiente** lidera la movilidad y muestra una fuerte preferencia por **España**, mientras que el grupo **Indígena** se orienta más a países fronterizos como Venezuela y Ecuador.
-* **Factores Familiares:** El viaje de los grupos etarios más jóvenes (primera infancia, adolescentes) replica los destinos de los adultos, confirmando que la **reunificación familiar** es un motor clave de la migración.
+* **Destinos Principales:** Estados Unidos, España y Venezuela.
+* **Perfil del Viajero:** El Adulto en edad productiva es el grupo que mas viaja.
+* **Formación academica:** Se identifican mas adultos con **baja formación** que los adultos con **alta formación**.
+* **Influencia Étnica:** El grupo **Afrodescendiente** lidera la movilidad.
+* **Factores Familiares:** Los jóvenes viajan a los mismos destinos de los adultos.
 
 ## Tecnologías usadas
 
@@ -219,7 +219,7 @@ Los resultados principales se resumen en los siguientes hallazgos:
    Se continúa en el notebook asignado a EDA, donde se:
 
    * Se carga la tabla limpia desde PostgreSQL.
-   * Se exploran variables clave (`grupo_edad`, `nivel_academico`, `pais`, `cantidad_de_personas`,`etnia_de_la_persona`) con visualizaciones.
+   * Se exploran variables clave (`grupo_edad`, `nivel_academico`, `pais`, `fecha_de_registro`, `cantidad_de_personas`,`etnia_de_la_persona`) con visualizaciones.
    * Se identifican tendencias relevantes (países principales, patrones migratorios, grupos vulnerables).
 
 5. **Construcción del Dashboard en Power BI**
@@ -230,11 +230,9 @@ Los resultados principales se resumen en los siguientes hallazgos:
 
 ## Conclusiones
 
-El análisis muestra que la migración colombiana al exterior es un fenómeno multifactorial liderado por adultos en edad productiva, cuyas decisiones de destino responden a una combinación de **factores económicos** (oportunidad o necesidad), **dinámicas familiares** (reunificación) y **elementos culturales y sociales** (redes étnicas que influyen en la elección del país).
+La migración colombiana al exterior está liderada principalmente por adultos en edad productiva y presenta patrones consistentes en la elección de los destinos. Estos patrones reflejan la interacción de factores económicos, familiares y culturales que influyen en la movilidad internacional.
 
-La formación académica y la pertenencia étnica introducen variaciones claras en los patrones migratorios: mientras los adultos con mayor formación tienden a migrar hacia países con mayores oportunidades profesionales, los grupos con menor formación se dirigen hacia destinos cercanos o con vínculos históricos.
-
-Finalmente, el análisis también evidencia que los **lazos familiares** son un motor de movilidad: los viajes de niños, adolescentes y jóvenes replican, casi en su totalidad, los destinos elegidos por los adultos, reforzando el papel de la reunificación familiar como eje central en los flujos migratorios.
+Asimismo, los flujos migratorios muestran una fuerte cohesión familiar, ya que los viajes de niños y adolescentes tienden a seguir los mismos destinos que los adultos, evidenciando dinámicas de migración conjunta.
 
 # Próximos Pasos
 
